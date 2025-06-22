@@ -33,12 +33,12 @@ st.markdown("<p style='text-align: center; color: grey;'>Upload a CSV or use a s
 df = None
 try:
     if use_sample:
-        df = pd.read_csv(sample_files[selected_sample])
+        df = pd.read_csv(sample_files[selected_sample], on_bad_lines='warn')
     elif uploaded_file is not None:
         try:
-            df = pd.read_csv(uploaded_file, encoding='utf-8')
+            df = pd.read_csv(uploaded_file, encoding='utf-8', on_bad_lines='warn')
         except UnicodeDecodeError:
-            df = pd.read_csv(uploaded_file, encoding='ISO-8859-1')
+            df = pd.read_csv(uploaded_file, encoding='ISO-8859-1', on_bad_lines='warn')
 except Exception as e:
     st.error(f"⚠️ Failed to load file: {e}")
     st.stop()
