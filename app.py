@@ -30,12 +30,18 @@ st.markdown("<h1 style='text-align: center;'>📦 AI Supply Chain ChatBot</h1>",
 st.markdown("<p style='text-align: center; color: grey;'>Upload a CSV or use a sample. Ask supply chain questions. Get charts & insights instantly.</p>", unsafe_allow_html=True)
 
 # Load Data
-if use_sample:
-    df = pd.read_csv(sample_files[selected_sample])
-elif uploaded_file:
-    df = pd.read_csv(uploaded_file)
-else:
-    df = None
+df = None
+try:
+    if use_sample:
+        df = pd.read_csv(sample_files[selected_sample])
+    elif uploaded_file is not None:
+        try:
+            df = pd.read_csv(uploaded_file, encoding='utf-8')
+        except UnicodeDecodeError:
+            df = pd.read_csv(uploaded_file, encoding='ISO-8859-1')
+except Exception as e:
+    st.error(f"⚠️ Failed to load file: {e}")
+    st.stop()
 
 # Show Data + Handle Queries
 if df is not None:
